@@ -1,0 +1,69 @@
+diff --git a/sam3/model/decoder.py b/sam3/model/decoder.py
+index dfd1cae..8d044a6 100644
+--- a/sam3/model/decoder.py
++++ b/sam3/model/decoder.py
+@@ -17,6 +17,14 @@ from sam3.sam.rope import apply_rotary_enc, apply_rotary_enc_real, compute_axial
+ from sam3.sam.transformer import RoPEAttention
+ from torch import nn, Tensor
+ from torch.nn.attention import sdpa_kernel, SDPBackend
++
++# ShotSpace: PyTorch for Windows has no flash attention kernel; there the next best kernel is used.  Elsewhere
++# exactly as upstream (flash attention only).
++_SDPA_BACKENDS = (
++    [SDPBackend.FLASH_ATTENTION, SDPBackend.EFFICIENT_ATTENTION, SDPBackend.MATH]
++    if __import__("os").name == "nt"
++    else SDPBackend.FLASH_ATTENTION
++)
+ from torchvision.ops.roi_align import RoIAlign
+ 
+ from .act_ckpt_utils import activation_ckpt_wrapper
+@@ -1062,7 +1070,7 @@ def functional_attention(
+         assert dropout == 0.0
+         out = flash_attn_func(q.transpose(1, 2), k.transpose(1, 2), v.transpose(1, 2))
+     else:
+-        with sdpa_kernel(SDPBackend.FLASH_ATTENTION):
++        with sdpa_kernel(_SDPA_BACKENDS):
+             out = torchF.scaled_dot_product_attention(q, k, v, dropout_p=dropout)
+         out = out.transpose(1, 2)  #  B * n * n_heads * (cv // num_heads)
+ 
+diff --git a/sam3/model/sam3_multiplex_tracking.py b/sam3/model/sam3_multiplex_tracking.py
+index 1b6ce7d..26ac844 100644
+--- a/sam3/model/sam3_multiplex_tracking.py
++++ b/sam3/model/sam3_multiplex_tracking.py
+@@ -208,6 +208,7 @@ class Sam3MultiplexTracking(Sam3MultiplexBase):
+         self,
+         resource_path,
+         offload_video_to_cpu=False,
++        offload_state_to_cpu=False,
+         async_loading_frames=False,
+         use_torchcodec=False,
+         use_cv2=False,
+@@ -1241,10 +1242,10 @@ class Sam3MultiplexTracking(Sam3MultiplexBase):
+     def _build_sam2_output(
+         self, inference_state, frame_idx, refined_obj_id_to_mask=None
+     ):
+-        if not frame_idx in inference_state["cached_frame_outputs"]:
++        if frame_idx not in inference_state["cached_frame_outputs"] and not refined_obj_id_to_mask:
+             return {}
+ 
+-        cached_outputs = inference_state["cached_frame_outputs"][frame_idx]
++        cached_outputs = inference_state["cached_frame_outputs"].get(frame_idx, {})
+         obj_id_to_mask = cached_outputs.copy()
+ 
+         # Update with refined masks if provided
+@@ -1837,6 +1838,7 @@ class Sam3MultiplexTrackingProd(Sam3MultiplexTracking):
+         self,
+         resource_path,
+         offload_video_to_cpu=False,
++        offload_state_to_cpu=False,
+         async_loading_frames=False,
+         use_torchcodec=False,
+         use_cv2=False,
+@@ -2219,6 +2221,7 @@ class Sam3MultiplexTrackingWithInteractivity(Sam3MultiplexTracking):
+         self,
+         resource_path,
+         offload_video_to_cpu=False,
++        offload_state_to_cpu=False,
+         async_loading_frames=False,
+         use_torchcodec=False,
+         use_cv2=False,

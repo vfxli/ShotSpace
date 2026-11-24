@@ -1,0 +1,23 @@
+# SAM 3D Body worker (Python 3.11).  torch / torchvision are installed first from the PyTorch index (cu128).
+numpy==2.4.6
+opencv-python-headless==5.0.0.93
+roma==1.6.1
+einops==0.8.2
+omegaconf==2.3.1
+pytorch-lightning==2.6.6
+torchmetrics==1.9.0
+lightning-utilities==0.15.3
+yacs==0.1.8
+braceexpand==0.1.7
+matplotlib==3.11.1
+scipy==1.17.1
+pillow==12.3.0
+rich==15.0.0
+termcolor==3.3.0
+optree==0.20.0
+cython==3.3.0
+dill==0.4.1
+tqdm==4.70.0
+pyyaml==6.0.3
+fsspec==2026.7.0
+setuptools==80.10.2

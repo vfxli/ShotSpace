@@ -1,0 +1,8 @@
+{
+  "enabled_gpus": [0, 1],
+  "max_concurrent_per_gpu": 1,
+  "retention_days": 30,
+  "cache_dir": "",
+  "default_ocio_input": "auto",
+  "default_ocio_view": "aces_sdr"
+}

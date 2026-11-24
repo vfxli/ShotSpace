@@ -1,0 +1,28 @@
+[project]
+name = "shotspace"
+version = "0.2.12"
+description = "入镜 · ShotSpace — 专业影视 CG 全身人体动作解算与摄影机空间对位工具"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=2.0",
+    "usd-core>=26.8",
+    "av>=14.0",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "python-multipart>=0.0.12",
+    "pydantic>=2.10.0",
+    "typer>=0.15.0",
+    "rich>=13.0.0",
+    "openexr>=3.3.0",
+]
+
+[project.scripts]
+shotspace = "shotspace.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["shotspace"]

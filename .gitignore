@@ -1,0 +1,28 @@
+# Installed by setup.sh / setup.bat (never commit)
+.tools/
+.venv/
+third_party/
+
+# Runtime data
+workspaces/
+data_collect/
+backups/
+update/
+config/*.json
+!config/default.json
+*.pid
+*.log
+*.log.old
+
+# Secrets
+secrets/
+.env
+*.env
+
+# Python / Node
+__pycache__/
+*.py[cod]
+*.egg-info/
+webui/node_modules/
+webui/.vite/
+.DS_Store

@@ -1,0 +1,10 @@
+# Extra packages for object matching (Linux only), added to the tracking worker's environment.
+decord==0.6.0
+fast-simplification==0.2.0
+moderngl==5.13.0
+glcontext==3.1.0
+scikit-image==0.26.0
+imageio==2.38.2
+tifffile==2026.3.3
+transformers==4.57.6
+tokenizers==0.22.2

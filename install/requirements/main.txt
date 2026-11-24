@@ -1,0 +1,15 @@
+# The service itself (Python 3.12).  Pinned to the versions ShotSpace is tested with.
+numpy==2.5.3
+usd-core==26.8
+av==18.1.0
+openexr==3.5.1
+openimageio==3.1.17.0
+opencolorio==2.5.2
+fastapi==0.141.1
+starlette==1.6.0
+uvicorn[standard]==0.52.4
+python-multipart==0.0.32
+pydantic==2.13.5
+typer==0.27.2
+rich==15.0.0
+httpx==0.28.1        # the web tests (starlette's test client)

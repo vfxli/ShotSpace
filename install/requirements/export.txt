@@ -1,0 +1,2 @@
+# Alembic / FBX export workers (Python 3.12): numpy, plus the prebuilt native modules (see install/sources.json).
+numpy==2.5.3
