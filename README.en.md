@@ -8,6 +8,8 @@
 ![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20Windows-informational)
 ![GPU](https://img.shields.io/badge/GPU-NVIDIA%2024GB-76B900)
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB)
+[![Powered by SAM 3.1](https://img.shields.io/badge/Powered%20by-SAM%203.1-0467DF)](https://github.com/facebookresearch/sam3)
+[![Powered by SAM 3D Body](https://img.shields.io/badge/Powered%20by-SAM%203D%20Body-0467DF)](https://github.com/facebookresearch/sam-3d-body)
 
 [简体中文](README.md) | **English**
 
@@ -17,15 +19,15 @@
 
 ## Overview
 
-Give ShotSpace an undistorted image sequence, the camera your matchmove already tracked and, optionally, a scan of
-the set. It finds every person in the shot, estimates their body on every frame and solves each person over the
-whole shot, delivering 3D people that line up exactly with the original camera space.
+ShotSpace is a body-matchmove tool for film and TV. It brings open models from Meta, SAM 3.1 and SAM 3D Body among them, into a VFX pipeline: given an undistorted image sequence, the camera your matchmove already tracked and, optionally, a scan of the set, it delivers 3D people aligned with the shot's camera space.
 
-- **Exact registration**: the tracked camera's per-frame lens and position are used as they are.
-- **Whole-shot solve**: one body shape per person, position constrained by every frame and the camera; with a scan, people stand on the real ground.
-- **People and crowds**: SAM 3.1 tracks everyone, SAM 3D Body estimates every frame; solve people one by one or all at once.
-- **Standard deliverables**: USD skeleton, USD point cache, FBX, Alembic, in metres.
-- **Built for teams**: one GPU server, everyone works in Chrome; each computer sees its own tasks, an admin page manages all.
+Finding, tracking and per-frame 3D estimation of people are done by these models; ShotSpace places their results in the exact camera space, solves each person over the whole shot and writes the usual VFX deliverables.
+
+- Uses the tracked camera's per-frame intrinsics and extrinsics as they are
+- Whole-shot solve, with ground constraints when a scan is available
+- Several people per shot, solved one by one or together
+- Exports USD skeleton, USD point cache, FBX and Alembic
+- Web interface; several computers share one GPU server
 
 <img src="docs/images/perspective_view.jpg" alt="Perspective view" width="100%">
 
@@ -68,13 +70,19 @@ Open `http://<server>:8765` in Chrome; the admin page is `/admin`.
 4. Optional: load a set scan and align to it
 5. Export USD / FBX / ABC
 
-## How it works
+## Built on
 
-| Stage | Method | Code |
-|---|---|---|
-| Find and track | SAM 3.1, forward and backward, one outline per person per frame | `solver/workers/people_tracker.py` |
-| Per-frame body | SAM 3D Body with the camera's real intrinsics | `solver/workers/sam3d_worker.py` |
-| Whole-shot solve | fixed body shape + camera + ground constraints | `solver/trajectory.py` · `solver/workers/body_solve.py` |
+ShotSpace stands on the shoulders of these projects; thanks to their authors:
+
+| Project | Used for |
+|---|---|
+| [SAM 3 / SAM 3.1](https://github.com/facebookresearch/sam3) (Meta) | finding and tracking people |
+| [SAM 3D Body](https://github.com/facebookresearch/sam-3d-body) (Meta) | per-frame body pose and shape, with the MHR body model |
+| [DINOv3](https://github.com/facebookresearch/dinov3) (Meta) | image backbone of SAM 3D Body |
+| [SAM 3D Objects](https://github.com/facebookresearch/sam-3d-objects), [MoGe](https://github.com/microsoft/MoGe), [TripoSR](https://github.com/VAST-AI-Research/TripoSR) | object matching (optional) |
+| [PyTorch](https://pytorch.org), [OpenUSD](https://openusd.org), [Alembic](https://github.com/alembic/alembic), Autodesk FBX SDK, [OpenColorIO](https://opencolorio.org), [OpenImageIO](https://github.com/AcademySoftwareFoundation/OpenImageIO) | compute, colour and file formats |
+
+ShotSpace's own part: the whole-shot solve that places the model results in the tracked camera space (`shotspace/solver/`), the web interface and job queue, and the VFX format import/export.
 
 ## License
 

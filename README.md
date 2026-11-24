@@ -8,6 +8,8 @@
 ![Platform](https://img.shields.io/badge/平台-Linux%20%7C%20Windows-informational)
 ![GPU](https://img.shields.io/badge/GPU-NVIDIA%2024GB-76B900)
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB)
+[![Powered by SAM 3.1](https://img.shields.io/badge/Powered%20by-SAM%203.1-0467DF)](https://github.com/facebookresearch/sam3)
+[![Powered by SAM 3D Body](https://img.shields.io/badge/Powered%20by-SAM%203D%20Body-0467DF)](https://github.com/facebookresearch/sam-3d-body)
 
 **简体中文** | [English](README.en.md)
 
@@ -17,13 +19,15 @@
 
 ## 简介
 
-输入去畸变序列、已跟踪好的摄影机和（可选）场景扫描，入镜自动找到画面中的每个人，逐帧估计身体，再对整段镜头统一解算，输出与原镜头空间完全对齐的三维人物。
+入镜是一个面向影视匹配移动（matchmove）的人物三维解算工具。它把 Meta 开源的 SAM 3.1 与 SAM 3D Body 等模型接入影视流程：输入去畸变序列、已跟踪好的摄影机和（可选）场景扫描，得到与镜头空间对齐的三维人物。
 
-- **精确对位**：直接使用跟踪摄影机的逐帧内外参，不反求、不改动。
-- **整段解算**：每人一套固定体型，位置由每帧画面和摄影机共同约束；有扫描时人站在真实地面上。
-- **多人与人群**：SAM 3.1 跟踪全部人物，SAM 3D Body 逐帧估计，可逐个累加解算。
-- **标准交付**：USD 骨架、USD 点缓存、FBX、Alembic，单位米。
-- **团队使用**：一台显卡服务器，大家用 Chrome 访问；每台电脑只看到自己的任务，管理后台统一管理。
+人物的识别、跟踪和逐帧三维估计都由这些模型完成；入镜负责把它们放进精确的摄影机空间，对整段镜头做统一解算，并输出常用的影视交付格式。
+
+- 直接使用跟踪摄影机的逐帧内外参
+- 整段镜头统一解算，有场景扫描时利用地面约束
+- 支持多人，可逐个累加解算
+- 导出 USD 骨架、USD 点缓存、FBX、Alembic
+- 网页界面，多台电脑共用一台显卡服务器
 
 <img src="docs/images/perspective_view.jpg" alt="透视图" width="100%">
 
@@ -65,13 +69,19 @@ setup.bat         # Windows
 4. 可选：导入场景扫描，按扫描对齐
 5. 导出 USD / FBX / ABC
 
-## 工作原理
+## 基于以下开源项目
 
-| 阶段 | 方法 | 代码 |
-|---|---|---|
-| 找人与跟踪 | SAM 3.1 正反双向跟踪，每人每帧一张遮罩 | `solver/workers/people_tracker.py` |
-| 逐帧估计 | SAM 3D Body，使用摄影机真实内参 | `solver/workers/sam3d_worker.py` |
-| 整段解算 | 固定体型 + 摄影机约束 + 地面约束 | `solver/trajectory.py` · `solver/workers/body_solve.py` |
+入镜站在这些项目的肩膀上，感谢它们的作者：
+
+| 项目 | 用途 |
+|---|---|
+| [SAM 3 / SAM 3.1](https://github.com/facebookresearch/sam3)（Meta） | 画面中人物的识别与跟踪 |
+| [SAM 3D Body](https://github.com/facebookresearch/sam-3d-body)（Meta） | 逐帧人体姿态与体型估计，使用 MHR 人体模型 |
+| [DINOv3](https://github.com/facebookresearch/dinov3)（Meta） | SAM 3D Body 的图像特征主干 |
+| [SAM 3D Objects](https://github.com/facebookresearch/sam-3d-objects)、[MoGe](https://github.com/microsoft/MoGe)、[TripoSR](https://github.com/VAST-AI-Research/TripoSR) | 物体匹配（可选） |
+| [PyTorch](https://pytorch.org)、[OpenUSD](https://openusd.org)、[Alembic](https://github.com/alembic/alembic)、Autodesk FBX SDK、[OpenColorIO](https://opencolorio.org)、[OpenImageIO](https://github.com/AcademySoftwareFoundation/OpenImageIO) | 计算、色彩与文件格式 |
+
+入镜自己的部分：把模型结果放进跟踪摄影机空间的整段解算（`shotspace/solver/`）、网页界面与任务队列、影视格式的导入导出。
 
 ## 许可
 
