@@ -1,0 +1,9 @@
+# line endings that the shells need, whatever the git settings of whoever clones
+*.sh   text eol=lf
+*.py   text eol=lf
+*.bat  text eol=crlf
+*.ps1  text eol=crlf
+*.zip  binary
+*.jpg  binary
+*.png  binary
+*.abc  binary
