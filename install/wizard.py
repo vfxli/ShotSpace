@@ -622,7 +622,7 @@ class Installer:
                 raise Abort(T(f"找不到 {local}", f"not found: {local}"))
             DOWNLOADS.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(local, zpath)
-        urls = [m["url"].format(repo=nb["repo"], tag=nb["tag"], file=asset["file"]) for m in order_mirrors("github_release", self.region)]
+        urls = [m["url"].format(repo=nb["repo"], commit=nb["commit"], file=asset["file"]) for m in order_mirrors("github_release", self.region)]
         fetch_any(urls, zpath, asset["sha256"], asset.get("size"), label=asset["file"])
         for name in ("alembic", "fbx"):
             py = self.uv.venv(TP / name / ".venv", "3.12")

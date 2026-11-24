@@ -89,19 +89,19 @@
   "github_release": [
    {
     "name": "GitHub",
-    "url": "https://github.com/{repo}/releases/download/{tag}/{file}",
+    "url": "https://raw.githubusercontent.com/{repo}/{commit}/{file}",
     "region": "global",
-    "probe": "https://github.com/"
+    "probe": "https://raw.githubusercontent.com/"
    },
    {
     "name": "gh-proxy.com",
-    "url": "https://gh-proxy.com/https://github.com/{repo}/releases/download/{tag}/{file}",
+    "url": "https://gh-proxy.com/https://raw.githubusercontent.com/{repo}/{commit}/{file}",
     "region": "cn",
     "probe": "https://gh-proxy.com/"
    },
    {
     "name": "ghfast.top",
-    "url": "https://ghfast.top/https://github.com/{repo}/releases/download/{tag}/{file}",
+    "url": "https://ghfast.top/https://raw.githubusercontent.com/{repo}/{commit}/{file}",
     "region": "cn",
     "probe": "https://ghfast.top/"
    }
@@ -456,7 +456,7 @@
  },
  "native": {
   "repo": "vfxli/ShotSpace",
-  "tag": "native-1",
+  "commit": "a26a4effa3afa571176cb8824830b4d61679cd59",
   "assets": {
    "linux-x86_64": {
     "file": "shotspace-native-linux-x86_64-py312.zip",

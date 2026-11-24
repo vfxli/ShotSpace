@@ -16,10 +16,10 @@ SHA-256) into `third_party/`, and asks you to accept their licences first.
 | [TripoSR](https://github.com/VAST-AI-Research/TripoSR) code and weights (optional) | object matching | MIT |
 | PyTorch and the Python packages listed in `install/requirements/` | runtime | their own licences (BSD, MIT, Apache 2.0, ...) |
 
-## Prebuilt export modules (GitHub release `native-*`)
+## Prebuilt export modules (`refs/native/native-1` in this repository)
 
-The ABC / FBX export modules are prebuilt from fixed upstream commits and downloaded by the setup wizard from
-this repository's release `native-1` (checked by SHA-256). Each zip contains a `BUNDLE_INFO.txt` with exact
+The ABC / FBX export modules are prebuilt from fixed upstream commits, stored in this repository under the
+reference `refs/native/native-1` (not fetched by `git clone`) and downloaded by the setup wizard (checked by SHA-256). Each zip contains a `BUNDLE_INFO.txt` with exact
 versions, build steps and the full licence texts.
 
 | Component | Licence |
