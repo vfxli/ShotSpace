@@ -456,12 +456,12 @@
  },
  "native": {
   "repo": "vfxli/ShotSpace",
-  "commit": "a26a4effa3afa571176cb8824830b4d61679cd59",
+  "commit": "4d8f25e668f18a0cfa8a5da4f71e28a7d96139b2",
   "assets": {
    "linux-x86_64": {
     "file": "shotspace-native-linux-x86_64-py312.zip",
-    "sha256": "9380e983608acd2c2cef1d34da45a20405581386e460c6700230425cced02d0e",
-    "size": 14054958
+    "sha256": "f53d54946dadde47789a93e965e7f18bf1f28421db919cb836329cafeb086baf",
+    "size": 14054904
    },
    "win-amd64": {
     "file": "shotspace-native-win-amd64-py312.zip",
